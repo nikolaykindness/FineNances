@@ -1,0 +1,23 @@
+﻿<Application x:Class="FineNances.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:FineNances"
+             StartupUri="View/MainWindow.xaml">
+    <Application.Resources>
+
+        <ResourceDictionary>
+
+            <ResourceDictionary.MergedDictionaries>
+
+                <ResourceDictionary Source="Core/DataTemplate.xaml"/>
+                <ResourceDictionary Source="Styles/Button.xaml"/>
+                <ResourceDictionary Source="Styles/ListBox.xaml"/>
+                <ResourceDictionary Source="Styles/ModalDialog.xaml"/>
+                <ResourceDictionary Source="Styles/Page.xaml"/>
+
+            </ResourceDictionary.MergedDictionaries>
+
+        </ResourceDictionary>
+        
+    </Application.Resources>
+</Application>

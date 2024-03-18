@@ -1,0 +1,43 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Style x:Key="NavButtonStyle"
+           TargetType="RadioButton">
+
+        <Setter Property="Foreground" Value="#99989D"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+
+                    <Grid>
+                        
+                        <Border x:Name="Indicator"
+                                Height="35"
+                                Width="4"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Background="#FFF"
+                                Visibility="Collapsed"/>
+
+                        <ContentPresenter/>
+                        
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Foreground" Value="#FFF"/>
+                        </Trigger>
+
+                    </ControlTemplate.Triggers>
+
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        
+    </Style>
+    
+</ResourceDictionary>

@@ -1,0 +1,87 @@
+﻿<UserControl x:Class="FineNances.View.History"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FineNances.View"
+             xmlns:vm="clr-namespace:FineNances.ViewModel"
+             mc:Ignorable="d" 
+             Style="{StaticResource PageStyle}"
+             d:DesignHeight="688" d:DesignWidth="896">
+
+    <UserControl.Resources>
+        <vm:HistoryVM x:Key="HistoryVM"/>
+    </UserControl.Resources>
+
+    <UserControl.DataContext>
+        <vm:HistoryVM/>
+    </UserControl.DataContext>
+    
+    <Grid>
+        
+        <Border Background="#F8F8F8">
+            <ListBox ItemsSource="{Binding TransactionsDay}"
+                SelectedItem="{Binding SelectedTransactionsDay}"
+                Style="{StaticResource FineNancesScrollableWrapListBoxStyle}">
+
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border MinWidth="264"
+                            Margin="16"
+                            Padding="8"
+                            Background="#FFF"
+                            BorderThickness="2"
+                            BorderBrush="#E8E8E8">
+                            <StackPanel>
+
+                                <DockPanel>
+                                    <TextBlock Text="14"
+                                        VerticalAlignment="Center"
+                                        FontSize="24"
+                                        DockPanel.Dock="Left"/>
+                                    <TextBlock Text="+ 4 750.00"
+                                        TextAlignment="Right"
+                                        VerticalAlignment="Center"
+                                        DockPanel.Dock="Right"/>
+                                    <StackPanel Margin="8 0">
+                                        <TextBlock Text="Вчера"/>
+                                        <TextBlock Text="Ноября 2023"/>
+                                    </StackPanel>
+                                </DockPanel>
+
+                                <ListBox DataContext="{StaticResource HistoryVM}"
+                                    ItemsSource="{Binding Transactions}"
+                                    SelectedItem="{Binding SelectedTransaction}"
+                                    Style="{StaticResource FineNancesListBoxStyle}"
+                                    Margin="0 12 0 0">
+
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <DockPanel Margin="0 0 0 4">
+                                                <Ellipse DockPanel.Dock="Left"
+                                                    MinWidth="32" Width="32"
+                                                    MinHeight="32" Height="32"
+                                                    Fill="#1E1E1E"/>
+                                                <TextBlock DockPanel.Dock="Right"
+                                                    VerticalAlignment="Center"
+                                                    Text="{Binding Amount}"/>
+                                                <StackPanel Margin="12 0">
+                                                    <TextBlock TextTrimming="CharacterEllipsis"
+                                                        Text="{Binding Category.Name}"/>
+                                                </StackPanel>
+                                            </DockPanel>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                    
+                                </ListBox>
+
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+
+            </ListBox>
+        </Border>
+        
+    </Grid>
+</UserControl>

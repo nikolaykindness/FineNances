@@ -1,0 +1,18 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:vm="clr-namespace:FineNances.ViewModel"
+                    xmlns:view="clr-namespace:FineNances.View">
+
+    <DataTemplate DataType="{x:Type vm:HomeVM}">
+        <view:Home/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:HistoryVM}">
+        <view:History/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:CategoryVM}">
+        <view:Category/>
+    </DataTemplate>
+    
+</ResourceDictionary>

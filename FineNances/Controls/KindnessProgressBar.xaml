@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="FineNances.Controls.KindnessProgressBar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FineNances.Controls"
+             xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing"
+             mc:Ignorable="d" x:Name="KindnessCircularProgressBar"
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <local:ValueToAngleConverter x:Key="ValueToAngleConverter"/>
+    </UserControl.Resources>
+    
+    <Grid>
+
+        <ed:Arc Stretch="None" EndAngle="360" ArcThickness="{Binding ElementName=KindnessCircularProgressBar, Path=ArcThickness}" 
+                Fill="{Binding ElementName=KindnessCircularProgressBar, Path=BackgroundBrush}"/>
+        <!--<Label x:Name="percentValue" Content="{Binding ElementName=kindnessCircularProgressBar, Path=percentValue}"
+               HorizontalAlignment="Center" VerticalAlignment="Center"/>-->
+        <ed:Arc x:Name="progressBar" Stretch="None" EndAngle="{Binding Converter={StaticResource ValueToAngleConverter},
+                ElementName=KindnessCircularProgressBar, Path=Value}" ArcThickness="{Binding ElementName=KindnessCircularProgressBar,
+                Path=ArcThickness}" Fill="{Binding ElementName=KindnessCircularProgressBar, Path=IndicatorBrush}"/>
+
+    </Grid>
+        
+</UserControl>

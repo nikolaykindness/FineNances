@@ -1,0 +1,191 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Style x:Key="NotScrollableListBoxStyle" TargetType="{x:Type ListBox}">
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="ItemContainerStyle">
+            <Setter.Value>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Padding" Value="0"/>
+                    <Setter Property="Margin" Value="0"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListBoxItem">
+                                <Border x:Name="border" BorderThickness="0" 
+                                        BorderBrush="Transparent" Background="Transparent">
+                                    <ContentPresenter Content="{TemplateBinding Content}"
+                                                      ContentTemplate="{TemplateBinding ContentTemplate}"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListBox}">
+                    <Border x:Name="Border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="1" SnapsToDevicePixels="true">
+                        <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsGrouping" Value="true"/>
+                                <Condition Property="VirtualizingPanel.IsVirtualizingWhenGrouping" Value="false"/>
+                            </MultiTrigger.Conditions>
+                        </MultiTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ScrollableListBoxStyle" TargetType="{x:Type ListBox}">
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Visible"/>
+        <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="ItemContainerStyle">
+            <Setter.Value>
+                <Style TargetType="ListBoxItem">
+                    <Style.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.25">
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger.Actions>
+                        </EventTrigger>
+                    </Style.Triggers>
+                    <Setter Property="Padding" Value="0"/>
+                    <Setter Property="Margin" Value="0"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListBoxItem">
+                                <Border x:Name="border" BorderThickness="0"
+                                    BorderBrush="Transparent" Background="Transparent">
+                                    <ContentPresenter Content="{TemplateBinding Content}"
+                                                  ContentTemplate="{TemplateBinding ContentTemplate}"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListBox}">
+                    <Border x:Name="Border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="1" SnapsToDevicePixels="true">
+                        <ScrollViewer Focusable="false" Padding="0">
+                            <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                        </ScrollViewer>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsGrouping" Value="true"/>
+                                <Condition Property="VirtualizingPanel.IsVirtualizingWhenGrouping" Value="false"/>
+                            </MultiTrigger.Conditions>
+                            <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>
+                        </MultiTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ScrollableWrapListBoxStyle" TargetType="{x:Type ListBox}">
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Visible"/>
+        <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal" IsItemsHost="True">
+
+                    </WrapPanel>
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemContainerStyle">
+            <Setter.Value>
+                <Style TargetType="ListBoxItem">
+                    <Style.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.25">
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger.Actions>
+                        </EventTrigger>
+                    </Style.Triggers>
+                    <Setter Property="Padding" Value="0"/>
+                    <Setter Property="Margin" Value="0"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListBoxItem">
+                                <Border x:Name="border" BorderThickness="0"
+                                BorderBrush="Transparent" Background="Transparent">
+                                    <ContentPresenter Content="{TemplateBinding Content}"
+                                              ContentTemplate="{TemplateBinding ContentTemplate}"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListBox}">
+                    <Border x:Name="Border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="1" SnapsToDevicePixels="true">
+                        <ScrollViewer Focusable="false" Padding="0">
+                            <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                        </ScrollViewer>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsGrouping" Value="true"/>
+                                <Condition Property="VirtualizingPanel.IsVirtualizingWhenGrouping" Value="false"/>
+                            </MultiTrigger.Conditions>
+                            <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>
+                        </MultiTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="FineNancesListBoxStyle" TargetType="ListBox" BasedOn="{StaticResource NotScrollableListBoxStyle}">
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+    </Style>
+
+    <Style x:Key="FineNancesScrollableListBoxStyle" TargetType="ListBox" BasedOn="{StaticResource ScrollableListBoxStyle}">
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+    </Style>
+
+    <Style x:Key="FineNancesScrollableWrapListBoxStyle" TargetType="ListBox" BasedOn="{StaticResource ScrollableWrapListBoxStyle}">
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Hidden"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+    </Style>
+
+</ResourceDictionary>
