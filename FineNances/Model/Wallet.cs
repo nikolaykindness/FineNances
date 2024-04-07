@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
-
-using FineNances.Core;
+﻿using FineNances.Core;
 using FineNances.Model.Interfaces;
+using System.Collections.Generic;
+using System.Globalization;
 
 namespace FineNances.Model
 {
@@ -20,17 +19,17 @@ namespace FineNances.Model
         private string _name;
         private decimal _amount;
         private CurrencyTypeEnum _currencyType;
-        private Dictionary<CurrencyTypeEnum, string> _currencyTypes = new Dictionary<CurrencyTypeEnum, string>() 
+        private Dictionary<CurrencyTypeEnum, string> _currencyTypes = new Dictionary<CurrencyTypeEnum, string>()
         {
             { CurrencyTypeEnum.RU, "ru-RU" },
             { CurrencyTypeEnum.US, "en-US" },
             { CurrencyTypeEnum.UK, "en-GB" }
         };
 
-        public int ID
+        public int Id
         {
             get { return _id; }
-            set { _id = value; OnPropertyChanged("WalletID");  }
+            set { _id = value; OnPropertyChanged("WalletID"); }
         }
 
         public string Name
@@ -46,7 +45,7 @@ namespace FineNances.Model
         }
 
         public CurrencyTypeEnum CurrencyType
-        { 
+        {
             get { return _currencyType; }
             set { _currencyType = value; OnPropertyChanged(nameof(CurrencyType)); }
         }
@@ -68,7 +67,7 @@ namespace FineNances.Model
             CurrencyType = CurrencyTypeEnum.Unknown;
         }
 
-        public Wallet(string name, CurrencyTypeEnum currencyType, decimal amount = 0) 
+        public Wallet(string name, CurrencyTypeEnum currencyType, decimal amount = 0)
         {
             Name = name;
             Amount = amount;

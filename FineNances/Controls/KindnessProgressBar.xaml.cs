@@ -22,7 +22,7 @@ namespace FineNances.Controls
         //    DefaultStyleKeyProperty.OverrideMetadata(typeof(KindnessProgressBar), new FrameworkPropertyMetadata(typeof(KindnessProgressBar)));
         //}
 
-        public static readonly DependencyProperty IndicatorBrushProperty = 
+        public static readonly DependencyProperty IndicatorBrushProperty =
             DependencyProperty.Register("IndicatorBrush", typeof(Brush), typeof(KindnessProgressBar));
         public static readonly DependencyProperty BackgroundBrushProperty =
             DependencyProperty.Register("BackgroundBrush", typeof(Brush), typeof(KindnessProgressBar));
@@ -35,7 +35,7 @@ namespace FineNances.Controls
         public Brush IndicatorBrush
         {
             get => (Brush)GetValue(IndicatorBrushProperty);
-            set => SetValue(IndicatorBrushProperty, value); 
+            set => SetValue(IndicatorBrushProperty, value);
         }
 
         public Brush BackgroundBrush

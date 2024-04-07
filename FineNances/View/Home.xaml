@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:cc="clr-namespace:FineNances.Controls"
+             xmlns:controls="clr-namespace:FineNances.Controls"
              xmlns:vm="clr-namespace:FineNances.ViewModel"
              mc:Ignorable="d" 
              Style="{StaticResource PageStyle}"
@@ -26,6 +26,42 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
+        <!--// WALLET MODAL DIALOG //-->
+        <controls:KindnessModalDialog
+            Grid.Column="0" Grid.ColumnSpan="2"
+            Grid.Row="0" Grid.RowSpan="2"
+            IsOpen="{Binding WalletDialogIsOpen}"
+            Panel.ZIndex="10">
+            <controls:KindnessModalDialog.Background>
+                <SolidColorBrush Color="White" Opacity="0.5"/>
+            </controls:KindnessModalDialog.Background>
+
+            <Border HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="#FFF"
+                BorderBrush="#E8E8E8"
+                BorderThickness="2"
+                Padding="16">
+
+                <StackPanel>
+                    <TextBlock FontSize="24" Text="Добавить кошелёк"/>
+                    <StackPanel Margin="0 12">
+                        <TextBlock Text="Название кошелька"/>
+                        <TextBox Text="{Binding WalletName, Mode=TwoWay}" 
+                                 BorderBrush="#E8E8E8" BorderThickness="1"
+                                 InputLanguageManager.InputLanguage="ru-RU"/>
+                    </StackPanel>
+                    <UniformGrid Rows="1">
+                        <Button Content="Добавить" Margin="0 0 12 0"
+                            Command="{Binding SaveWalletCommand}"/>
+                        <Button Content="Отменить" Margin="12 0 0 0"
+                            Command="{Binding CancelModalCommand}"/>
+                    </UniformGrid>
+                </StackPanel>
+
+            </Border>
+        </controls:KindnessModalDialog>
+
         <!--// WALLETS //-->
         <Border Grid.Column="0" Grid.Row="0"
                 Background="#FFF"
@@ -47,7 +83,7 @@
                     <DockPanel>
                         <Button DockPanel.Dock="Right" 
                                 Content="+ добавить кошелек"
-                                Command="{Binding AddWallet}"
+                                Command="{Binding AddWalletCommand}"
                                 VerticalAlignment="Center"
                                 FontSize="16"/>
                         <TextBlock Text="Мои кошельки"
@@ -75,6 +111,7 @@
                                          Text="{Binding DisplayAmount, UpdateSourceTrigger=PropertyChanged}"/>
                                 <TextBlock Margin="16" FontSize="20"
                                          VerticalAlignment="Center"
+                                         TextTrimming="CharacterEllipsis"
                                          Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
                             </DockPanel>
                         </DataTemplate>
@@ -177,15 +214,17 @@
             <!--// TITLE //-->
             <StackPanel Margin="12">
                 <DockPanel>
-                    <Button DockPanel.Dock="Right" 
+                    <DockPanel>
+                        <Button DockPanel.Dock="Right" 
                             Content="Посмотреть все"
-                            Command=""
+                            Command="{Binding ToHistory}"
                             VerticalAlignment="Center"
                             FontSize="12"/>
-                    <TextBlock Text="Недавние транзакции"
+                        <TextBlock Text="Недавние транзакции"
                             VerticalAlignment="Center"
                             FontSize="16"
                             FontWeight="Bold"/>
+                    </DockPanel>
                 </DockPanel>
                 <ListBox ItemsSource="{Binding RecentlyTransactions}"
                          SelectedItem="{Binding SelectedRecentlyTransaction}"
@@ -247,7 +286,7 @@
                         <DataTemplate>
 
                             <DockPanel Margin="0 0 0 24">
-                                <cc:KindnessProgressBar Width="32"
+                                <controls:KindnessProgressBar Width="32"
                                                         DockPanel.Dock="Left"
                                                         Value="{Binding PercentageProgress}"
                                                         ArcThickness="2"

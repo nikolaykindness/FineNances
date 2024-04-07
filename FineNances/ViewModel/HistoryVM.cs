@@ -2,7 +2,6 @@
 using FineNances.Model;
 using System;
 using System.Collections.ObjectModel;
-using System.Net.Http.Headers;
 
 namespace FineNances.ViewModel
 {
@@ -12,8 +11,8 @@ namespace FineNances.ViewModel
         private ObservableCollection<Transaction> _selectedTransactionsDay;
 
         public Transaction SelectedTransaction
-        { 
-            get { return _selectedTransaction; } 
+        {
+            get { return _selectedTransaction; }
             set { _selectedTransaction = value; OnPropertyChanged(nameof(SelectedTransaction)); }
         }
         public ObservableCollection<Transaction> SelectedTransactionsDay
@@ -24,7 +23,7 @@ namespace FineNances.ViewModel
         public ObservableCollection<Transaction> Transactions { get; set; }
         public ObservableCollection<ObservableCollection<Transaction>> TransactionsDay { get; set; }
 
-        public HistoryVM() 
+        public HistoryVM()
         {
             Transactions = new ObservableCollection<Transaction>()
             {
@@ -36,7 +35,7 @@ namespace FineNances.ViewModel
                     Category = new Category("Питание"), TransactionDate = DateTime.Now.ToString("M") },
             };
 
-            TransactionsDay = 
+            TransactionsDay =
                 [
                     Transactions, Transactions, Transactions,
                     Transactions, Transactions, Transactions,

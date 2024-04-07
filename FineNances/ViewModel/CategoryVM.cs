@@ -1,7 +1,10 @@
 ﻿using FineNances.Core;
 using FineNances.Model;
+using FineNances.Model.Data;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Windows;
+using System.Linq;
+using System.Windows.Documents;
 using System.Windows.Input;
 
 namespace FineNances.ViewModel
@@ -25,23 +28,17 @@ namespace FineNances.ViewModel
             set { _note = value; OnPropertyChanged(nameof(Note)); }
         }
 
-        public Category SelectedCategory 
+        public Category SelectedCategory
         {
-            get { return _selectedCategory; } 
+            get { return _selectedCategory; }
             set { _selectedCategory = value; OnPropertyChanged(nameof(SelectedCategory)); }
         }
+
         public ObservableCollection<Category> Categories { get; set; }
 
         public CategoryVM()
         {
-            Categories = new ObservableCollection<Category>()
-            {
-                new Category() { Name = "Питание" },
-                new Category() { Name = "Зарплата" },
-                new Category() { Name = "Образование" },
-                new Category() { Name = "Техника" },
-                new Category() { Name = "Покупки" }
-            };
+            Categories = new ObservableCollection<Category>(DataWorker.GetAllCategories());
         }
 
         public ICommand AddCategoryCommand => new RelayCommand(AddCategory);
@@ -49,9 +46,9 @@ namespace FineNances.ViewModel
         public ICommand CancelCategoryCommand => new RelayCommand(CancelCategory);
 
         private bool _dialogIsOpen;
-        public bool DialogIsOpen 
+        public bool DialogIsOpen
         {
-            get { return _dialogIsOpen; } 
+            get { return _dialogIsOpen; }
             set { _dialogIsOpen = value; OnPropertyChanged(nameof(DialogIsOpen)); }
         }
 
@@ -64,7 +61,11 @@ namespace FineNances.ViewModel
         {
             if (!string.IsNullOrWhiteSpace(Name))
             {
-                Categories.Add(new Category(Name));
+                Category newCategory = new Category(Name);
+
+                Categories.Add(newCategory);
+                DataWorker.AddCategory(newCategory);
+
                 Name = string.Empty;
                 DialogIsOpen = false;
             }

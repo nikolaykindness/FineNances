@@ -13,7 +13,7 @@
                 <ControlTemplate TargetType="RadioButton">
 
                     <Grid>
-                        
+
                         <Border x:Name="Indicator"
                                 Height="35"
                                 Width="4"
@@ -23,7 +23,7 @@
                                 Visibility="Collapsed"/>
 
                         <ContentPresenter/>
-                        
+
                     </Grid>
 
                     <ControlTemplate.Triggers>
@@ -37,7 +37,77 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        
+
     </Style>
-    
+
+    <Style x:Key="ButtonStyle"
+       TargetType="RadioButton">
+
+        <Setter Property="Foreground" Value="#99989D"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+
+                    <Grid>
+
+                        <Border x:Name="Indicator"
+                            Height="35"
+                            Width="4"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Background="#FFF"
+                            Visibility="Collapsed"/>
+
+                        <ContentPresenter/>
+
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Foreground" Value="#FFF"/>
+                        </Trigger>
+
+                    </ControlTemplate.Triggers>
+
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+    </Style>
+
+    <Style x:Key="AdditionalButton" TargetType="{x:Type Button}">
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0 0 0 30"/>
+        <Setter Property="Height" Value="24"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    
+                    <Border x:Name="border"
+                            CornerRadius="12"
+                            Background="#20CB1D">
+
+                        <ContentPresenter TextBlock.Foreground="White"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Cursor" Value="Hand"/>
+                        </Trigger>
+
+                    </ControlTemplate.Triggers>
+                    
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>

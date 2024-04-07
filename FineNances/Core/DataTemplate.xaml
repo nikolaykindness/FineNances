@@ -7,12 +7,20 @@
         <view:Home/>
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type vm:PiggyBankVM}">
+        <view:PiggyBank/>
+    </DataTemplate>
+
     <DataTemplate DataType="{x:Type vm:HistoryVM}">
         <view:History/>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vm:CategoryVM}">
         <view:Category/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:AboutProgramVM}">
+        <view:AboutProgram/>
     </DataTemplate>
     
 </ResourceDictionary>

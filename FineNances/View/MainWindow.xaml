@@ -3,19 +3,18 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:FineNances"
-        xmlns:vm="clr-namespace:FineNances.ViewModel"
         xmlns:core="clr-namespace:FineNances.Core"
+        xmlns:vm="clr-namespace:FineNances.ViewModel"
         xmlns:controls="clr-namespace:FineNances.Controls"
         mc:Ignorable="d"
         Background="#F8F8F8"
         Title="FineNances" Width="1040" Height="720">
 
     <Window.DataContext>
-        <vm:NavigationVM/>
+        <vm:ApplicationVM/>
     </Window.DataContext>
-    
-    <Grid>
+
+    <Grid DataContext="{Binding NavigationVM, UpdateSourceTrigger=PropertyChanged}">
 
         <!--// Base Grid //-->
         <Grid.ColumnDefinitions>
@@ -23,34 +22,69 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <!--// Side Bar //-->
-        <Grid Background="#1E1E1E">
-
-            <StackPanel Margin="0 32 0 0">
-                
-                <StackPanel.Resources>
-                    <Style TargetType="{x:Type core:NavigateButton}"
-                           BasedOn="{StaticResource NavButtonStyle}">
-                        <Setter Property="Margin" Value="0 0 0 5"/>
-                    </Style>
-                </StackPanel.Resources>
-
-                <core:NavigateButton Content="Главная" IsChecked="True"
-                                     Command="{Binding HomeCommand}"/>
-                <core:NavigateButton Content="История"
-                                     Command="{Binding HistoryCommand}"/>
-                <core:NavigateButton Content="Категории"
-                                     Command="{Binding CategoryCommand}"/>
-                <core:NavigateButton Content="+ Платеж"/>
-
-            </StackPanel>
+        <controls:KindnessModalDialog>
             
+        </controls:KindnessModalDialog>
+
+        <!--// Side Bar //-->
+        <Grid>
+
+            <Border Background="#1E1E1E"
+                    Padding="0 32 0 0">
+
+                <DockPanel>
+
+                    <StackPanel DockPanel.Dock="Bottom">
+
+                        <StackPanel.Resources>
+                            <Style TargetType="{x:Type controls:NavigateButton}"
+                                BasedOn="{StaticResource NavButtonStyle}">
+                                <Setter Property="Margin" Value="0 0 0 8"/>
+                                <Setter Property="GroupName" Value="Navigation"/>
+                            </Style>
+                        </StackPanel.Resources>
+
+                        <Separator Height="1" Background="#99989D"
+                                   Margin="0 0 0 4"/>
+                        <controls:NavigateButton Content="Настройки"/>
+                        <controls:NavigateButton Content="О программе"
+                                                 Command="{Binding AboutProgrammCommand}"/>
+
+                    </StackPanel>
+
+                    <StackPanel>
+
+                        <StackPanel.Resources>
+                            <Style TargetType="{x:Type controls:NavigateButton}"
+                                BasedOn="{StaticResource NavButtonStyle}">
+                                <Setter Property="Margin" Value="0 0 0 8"/>
+                                <Setter Property="GroupName" Value="Navigation"/>
+                            </Style>
+                        </StackPanel.Resources>
+
+                        <controls:NavigateButton Content="Главная" IsChecked="True"
+                            Command="{Binding HomeCommand}"/>
+                        <controls:NavigateButton Content="Копилка"
+                            Command="{Binding PiggyBankCommand}"/>
+                        <controls:NavigateButton x:Name="History" Content="История"
+                            Command="{Binding HistoryCommand}"/>
+                        <controls:NavigateButton x:Name="Category" Content="Категории"
+                            Command="{Binding CategoryCommand}"/>
+                        <Button Style="{StaticResource AdditionalButton}"
+                            Margin="24 12" Content="+ Платеж"/>
+
+                    </StackPanel>
+
+                </DockPanel>
+
+            </Border>
+
         </Grid>
 
         <Grid Grid.Column="1">
 
             <ContentControl x:Name="Pages"
-                            Content="{Binding CurrentView}"/>
+                            Content="{Binding CurrentView, UpdateSourceTrigger=PropertyChanged}"/>
 
         </Grid>
         

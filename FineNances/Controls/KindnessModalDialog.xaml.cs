@@ -8,9 +8,9 @@ namespace FineNances.Controls
     /// </summary>
     public partial class KindnessModalDialog : UserControl
     {
-        
 
-        static KindnessModalDialog() 
+
+        static KindnessModalDialog()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(KindnessModalDialog), new FrameworkPropertyMetadata(typeof(KindnessModalDialog)));
         }
@@ -23,6 +23,6 @@ namespace FineNances.Controls
 
         public static readonly DependencyProperty IsOpenProperty =
             DependencyProperty.Register("IsOpen", typeof(bool), typeof(KindnessModalDialog), new PropertyMetadata(default(bool)));
-        
+
     }
 }

@@ -1,0 +1,38 @@
+﻿<UserControl x:Class="FineNances.View.AboutProgram"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FineNances.View"
+             mc:Ignorable="d"
+             Style="{StaticResource PageStyle}"
+             d:DesignHeight="688" d:DesignWidth="896">
+    <Grid x:Name="RootLayout" Background="#F8F8F8">
+
+        <DockPanel>
+            <StackPanel DockPanel.Dock="Top" Margin="0 16 0 0">
+                <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top">
+                    <Image Height="160"
+                    Source="/Images/Icons/FineNancesLogo.png"/>
+                    <TextBlock FontSize="48" Text="FineNances"
+                           VerticalAlignment="Center"
+                           Margin="16 0 0 0"/>
+                </StackPanel>
+                <StackPanel Margin="32">
+                    <TextBlock FontSize="20"
+                        TextWrapping="WrapWithOverflow"
+                        Text="FineNances — это приложение, которое является инструментом для ведения личных финансов. Позволяет удобно вести бюджет, откладывать и копить деньги, следить за своими доходами и расходами"/>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Margin="0 16"
+                        VerticalAlignment="Bottom"
+                        HorizontalAlignment="Center">
+                <TextBlock FontSize="16"
+                    Text="© KindnessApps, 2024. Все права защищены."/>
+            </StackPanel>
+        </DockPanel>
+
+    </Grid>
+</UserControl>

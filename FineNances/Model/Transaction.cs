@@ -1,9 +1,6 @@
 ﻿using FineNances.Core;
 using FineNances.Model.Interfaces;
-using static FineNances.Model.Interfaces.IWallet;
 using System.Globalization;
-using System.Collections.Generic;
-using System;
 
 namespace FineNances.Model
 {
@@ -17,17 +14,39 @@ namespace FineNances.Model
             Unknown
         }
 
+        private int _transactionId;
+        private int _walletId;
         private Wallet _wallet;
-        private decimal _amount;
+        private int _categoryId;
         private Category _category;
+
+        private decimal _amount;
         private string _transactionDate;
         private TransactionTypeEnum _transactionType;
         private int _percantage;
 
-        public Wallet Wallet
+        public int TransactionId
+        {
+            get { return _transactionId; }
+            set {  _transactionId = value; }
+        }
+
+        public int WalletId
+        {
+            get { return _walletId; }
+            set { _walletId = value; }
+        }
+
+        public virtual Wallet Wallet
         {
             get { return _wallet; }
             set { _wallet = value; OnPropertyChanged("ExpensingWallet"); }
+        }
+
+        public int CategoryId
+        {
+            get { return _categoryId; }
+            set { _categoryId = value; }
         }
 
         public Category Category
@@ -79,7 +98,7 @@ namespace FineNances.Model
             set { _transactionType = value; OnPropertyChanged(nameof(TransactionType)); }
         }
 
-        public Transaction() 
+        public Transaction()
         {
             Wallet = new Wallet();
             Amount = 0;
