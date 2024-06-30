@@ -1,0 +1,209 @@
+﻿<UserControl x:Class="FineNances.View.Statistics"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FineNances.View"
+             xmlns:vm="clr-namespace:FineNances.ViewModel"
+             xmlns:Wpf="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+             mc:Ignorable="d" 
+             Style="{StaticResource PageStyle}"
+             d:DesignHeight="688" d:DesignWidth="896">
+
+    <UserControl.DataContext>
+        <vm:StatisticsVM/>
+    </UserControl.DataContext>
+    
+    <Grid x:Name="RootLayout" Background="#F8F8F8">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="120"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <!--// HEADER-TITLE //-->
+        <StackPanel VerticalAlignment="Top"
+                    HorizontalAlignment="Center"
+                    Margin="0 16 0 0">
+
+            <TextBlock Margin="0 0 0 8"
+                       Text="Баланс"
+                       Foreground="#1E1E1E"
+                       HorizontalAlignment="Center"
+                       FontSize="20"/>
+            <TextBlock Margin="0 0 0 8"
+                       Text="26 350.00 ₽"
+                       Foreground="#1E1E1E"
+                       HorizontalAlignment="Center"
+                       FontWeight="Medium"
+                       FontSize="20"/>
+            <ComboBox Style="{StaticResource ComboBoxStyle}"
+                      ItemsSource="{Binding Wallets, UpdateSourceTrigger=PropertyChanged}"
+                      SelectedItem="{Binding SelectedWallet, Mode=TwoWay}"
+                      Width="160"
+                      Height="24"
+                      BorderBrush="#A5A5A5"
+                      Tag="Наличные">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </StackPanel>
+
+        <!--// STATISTIC CHARTS //-->
+        <Border Grid.Row="1"
+                Padding="24">
+
+            <Grid>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Grid.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="Background" Value="White"/>
+                    </Style>
+                </Grid.Resources>
+
+                <!--// EXPENSE //-->
+                <Border Grid.Row="0" Grid.Column="0"
+                        BorderThickness="1"
+                        BorderBrush="#B1B1B1"
+                        CornerRadius="40"
+                        Margin="16">
+                    <Grid>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <DockPanel>
+                            <TextBlock Text="Расход"
+                                       FontSize="18"
+                                       FontWeight="Medium"
+                                       Margin="24 16 0 0"
+                                       DockPanel.Dock="Left"/>
+                            <TextBlock Text="11 650.00 ₽"
+                                       TextAlignment="Right"
+                                       FontSize="18"
+                                       Foreground="#cb1d1d"
+                                       FontWeight="Medium"
+                                       Margin="24 16 24 0"/>
+                        </DockPanel>
+                        
+                        <!--32, 203, 29-->
+                        <Border Grid.Row="1"
+                                Padding="12">
+                            <Wpf:PieChart>
+                                <Wpf:PieChart.SeriesColors>
+                                    <Wpf:ColorsCollection>
+                                        <Color R="32" G="203" B="29" ScA="1"/>
+                                        <Color R="255" G="160" B="18" ScA="1"/>
+                                        <Color R="29" G="151" B="203" ScA="1"/>
+                                    </Wpf:ColorsCollection>
+                                </Wpf:PieChart.SeriesColors>
+                                
+                                <Wpf:PieChart.Series>
+                                    <Wpf:PieSeries Title="Покупки" Values="30"/>
+                                    <Wpf:PieSeries Title="Питание" Values="9"/>
+                                    <Wpf:PieSeries Title="Техника" Values="60"/>
+                                </Wpf:PieChart.Series>
+                            </Wpf:PieChart>
+                        </Border>
+                        
+                    </Grid>
+                </Border>
+
+                <!--// INCOME //-->
+                <Border Grid.Row="0" Grid.Column="1"
+                        BorderThickness="1"
+                        BorderBrush="#B1B1B1"
+                        CornerRadius="40"
+                        Margin="16">
+                    <Grid>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <DockPanel>
+                            <TextBlock Text="Доход"
+                                       FontSize="18"
+                                       FontWeight="Medium"
+                                       Margin="24 16 0 0"
+                                       DockPanel.Dock="Left"/>
+                            <TextBlock Text="18 000.00 ₽"
+                                       TextAlignment="Right"
+                                       FontSize="18"
+                                       Foreground="#20CB1D"
+                                       FontWeight="Medium"
+                                       Margin="24 16 24 0"/>
+                        </DockPanel>
+                        <!--203, 29, 29-->
+                        <Border Grid.Row="1"
+                                Padding="12">
+                            <Wpf:PieChart>
+                                <Wpf:PieChart.SeriesColors>
+                                    <Wpf:ColorsCollection>
+                                        <Color R="32" G="203" B="29" ScA="1"/>
+                                        <Color R="255" G="160" B="18" ScA="1"/>
+                                    </Wpf:ColorsCollection>
+                                </Wpf:PieChart.SeriesColors>
+
+                                <Wpf:PieChart.Series>
+                                    <Wpf:PieSeries Title="Зарплата" Values="5"/>
+                                    <Wpf:PieSeries Title="Перевод" Values="1"/>
+                                </Wpf:PieChart.Series>
+                            </Wpf:PieChart>
+                        </Border>
+
+                    </Grid>
+                </Border>
+
+                <!--// OTHER OPERATIONS //-->
+                <Border Grid.Row="1"
+                        Grid.ColumnSpan="2"
+                        BorderThickness="1"
+                        BorderBrush="#B1B1B1"
+                        CornerRadius="40"
+                        Margin="16">
+                    <Grid Margin="8">
+
+                        <Wpf:CartesianChart LegendLocation="Bottom">
+
+                            <Wpf:CartesianChart.AxisY>
+
+                                <Wpf:Axis Title="Денежный поток"/>
+
+                            </Wpf:CartesianChart.AxisY>
+
+                            <Wpf:CartesianChart.Series>
+
+                                <Wpf:ColumnSeries Title="Доход" Values="18000"/>
+                                <Wpf:ColumnSeries Title="Расход" Values="11650"/>
+                                <Wpf:ColumnSeries Title="Прирост" Values="6350"/>
+
+                            </Wpf:CartesianChart.Series>
+                        
+                        </Wpf:CartesianChart>
+                        
+                    </Grid>
+                </Border>
+
+            </Grid>
+
+        </Border>
+
+    </Grid>
+</UserControl>

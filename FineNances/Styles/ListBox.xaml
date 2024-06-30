@@ -22,6 +22,18 @@
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
+                    <Style.Triggers>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.25">
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger.Actions>
+                        </EventTrigger>
+                    </Style.Triggers>
                 </Style>
             </Setter.Value>
         </Setter>
@@ -55,6 +67,9 @@
             <Setter.Value>
                 <Style TargetType="ListBoxItem">
                     <Style.Triggers>
+                        <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                            <Setter Property="IsSelected" Value="True" />
+                        </Trigger>
                         <EventTrigger RoutedEvent="Loaded">
                             <EventTrigger.Actions>
                                 <BeginStoryboard>
@@ -125,7 +140,17 @@
             <Setter.Value>
                 <Style TargetType="ListBoxItem">
                     <Style.Triggers>
-                        <EventTrigger RoutedEvent="Loaded">
+                        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.25">
+                                        </DoubleAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger.Actions>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="FrameworkElement.Unloaded">
                             <EventTrigger.Actions>
                                 <BeginStoryboard>
                                     <Storyboard>
@@ -177,6 +202,7 @@
 
     <Style x:Key="FineNancesListBoxStyle" TargetType="ListBox" BasedOn="{StaticResource NotScrollableListBoxStyle}">
         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="Background" Value="Transparent"/>
     </Style>
 
     <Style x:Key="FineNancesScrollableListBoxStyle" TargetType="ListBox" BasedOn="{StaticResource ScrollableListBoxStyle}">

@@ -5,7 +5,7 @@ using System.Globalization;
 
 namespace FineNances.Model
 {
-    internal class Goal : ViewModelBase, IWallet
+    internal class Goal : BindableBase, IWallet
     {
         public enum CurrencyTypeEnum
         {

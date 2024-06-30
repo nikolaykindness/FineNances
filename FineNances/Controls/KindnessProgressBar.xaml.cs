@@ -30,6 +30,8 @@ namespace FineNances.Controls
             DependencyProperty.Register("ArcThickness", typeof(int), typeof(KindnessProgressBar));
         public static readonly DependencyProperty ValueProperty =
             DependencyProperty.Register("Value", typeof(int), typeof(KindnessProgressBar));
+        public static readonly DependencyProperty ImageSourceProperty =
+            DependencyProperty.Register("ImageSource", typeof(string), typeof(KindnessProgressBar));
 
 
         public Brush IndicatorBrush
@@ -54,6 +56,12 @@ namespace FineNances.Controls
         {
             get => (int)GetValue(ValueProperty);
             set => SetValue(ValueProperty, value);
+        }
+
+        public string ImageSource
+        {
+            get => (string)GetValue(ImageSourceProperty);
+            set => SetValue(ImageSourceProperty, value);
         }
     }
 

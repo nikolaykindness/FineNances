@@ -11,8 +11,24 @@
     <UserControl.Resources>
         <local:ValueToAngleConverter x:Key="ValueToAngleConverter"/>
     </UserControl.Resources>
-    
+
     <Grid>
+
+        <Grid Margin="4">
+            <Image>
+                <Image.Source>
+                    <DrawingImage>
+                        <DrawingImage.Drawing>
+                            <DrawingGroup ClipGeometry="M0,0 V24 H24 V0 H0 Z">
+                                <GeometryDrawing Brush="#FF000000" Geometry="F1 M24,24z M0,0z M11,8.1C11.5,8 11.9,7.4 11.7,6.9 11.6,6.4 11,6 10.5,6.2 7.8,6.8 6,9.2 6,12 6,15.3 8.7,18 12,18 15.1,18 17.7,15.6 18,12.5 18.1,12 17.6,11.5 17.1,11.4 16.6,11.3 16.1,11.8 16,12.3 15.8,14.3 14,16 12,16 9.8,16 8,14.2 8,12 8,10.1 9.2,8.5 11,8.1z" />
+                                <GeometryDrawing Brush="#FF000000" Geometry="F1 M24,24z M0,0z M21,11C20.4,11 20,11.4 20,12 20,16.4 16.4,20 12,20 7.6,20 4,16.4 4,12 4,7.79999 7.3,4.29999 11.5,3.99999 12.1,3.99999 12.5,3.49999 12.4,2.89999 12.4,2.29999 11.9,1.89999 11.3,1.99999 6.1,2.39999 2,6.69999 2,12 2,17.5 6.5,22 12,22 17.5,22 22,17.5 22,12 22,11.4 21.5,11 21,11z" />
+                                <GeometryDrawing Brush="#FF000000" Geometry="F1 M24,24z M0,0z M13.9,8.70001L11.3,11.3C10.9,11.7 10.9,12.3 11.3,12.7 11.5,12.9 11.8,13 12,13 12.2,13 12.5,12.9 12.7,12.7L15.3,10.1 17,10.6C17.1,10.6 17.2,10.6 17.3,10.6 17.6,10.6 17.8,10.5 18,10.3L21.9,6.30001C22.1,6.10001 22.2,5.70001 22.2,5.40001 22.2,5.10001 21.9,4.80001 21.6,4.70001L19.8,4.10001 19.2,2.30001C19.1,2.00001 18.8,1.70001 18.5,1.70001 18.2,1.60001 17.8,1.70001 17.6,2.00001L13.7,6.00001C13.4,6.30001,13.3,6.70001,13.5,7.00001L13.9,8.70001z M17.8,4.60001L18.1,5.30001C18.2,5.60001,18.4,5.80001,18.7,5.90001L19.4,6.20001 17,8.60001 15.8,8.20001 15.4,7.00001 17.8,4.60001z" />
+                            </DrawingGroup>
+                        </DrawingImage.Drawing>
+                    </DrawingImage>
+                </Image.Source>
+            </Image>
+        </Grid>
 
         <ed:Arc Stretch="None" EndAngle="360" ArcThickness="{Binding ElementName=KindnessCircularProgressBar, Path=ArcThickness}" 
                 Fill="{Binding ElementName=KindnessCircularProgressBar, Path=BackgroundBrush}"/>
@@ -23,5 +39,5 @@
                 Path=ArcThickness}" Fill="{Binding ElementName=KindnessCircularProgressBar, Path=IndicatorBrush}"/>
 
     </Grid>
-        
+
 </UserControl>

@@ -7,8 +7,8 @@
         <view:Home/>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type vm:PiggyBankVM}">
-        <view:PiggyBank/>
+    <DataTemplate DataType="{x:Type vm:StatisticsVM}">
+        <view:Statistics/>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vm:HistoryVM}">

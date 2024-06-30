@@ -1,47 +1,68 @@
-﻿using FineNances.Core;
+﻿using System.Collections.ObjectModel;
+using System.Linq;
+
+using FineNances.Core;
 using FineNances.Model;
-using System;
-using System.Collections.ObjectModel;
 
 namespace FineNances.ViewModel
 {
-    internal class HistoryVM : ViewModelBase
+    internal class HistoryVM : BindableBase
     {
-        private Transaction _selectedTransaction;
-        private ObservableCollection<Transaction> _selectedTransactionsDay;
+        private ObservableCollection<Wallet> _wallets;
+        private ObservableCollection<Transaction> _transactions;
+        private ObservableCollection<TransactionCard> _transactionCards;
 
-        public Transaction SelectedTransaction
+        public Transaction SelectedTransaction { get; set; }
+        public TransactionCard SelectedTransactionCard { get; set; }
+        public Wallet SelectedWallet { get; set; }
+
+        public ObservableCollection<Transaction> Transactions
         {
-            get { return _selectedTransaction; }
-            set { _selectedTransaction = value; OnPropertyChanged(nameof(SelectedTransaction)); }
+            get { return _transactions; }
+            set { _transactions = value; OnPropertyChanged(nameof(Transactions)); }
         }
-        public ObservableCollection<Transaction> SelectedTransactionsDay
+        public ObservableCollection<TransactionCard> TransactionCards
         {
-            get { return _selectedTransactionsDay; }
-            set { _selectedTransactionsDay = value; OnPropertyChanged(nameof(SelectedTransactionsDay)); }
+            get { return _transactionCards; }
+            set { _transactionCards = value; OnPropertyChanged(nameof(TransactionCards)); }
         }
-        public ObservableCollection<Transaction> Transactions { get; set; }
-        public ObservableCollection<ObservableCollection<Transaction>> TransactionsDay { get; set; }
+        public ObservableCollection<Wallet> Wallets
+        {
+            get { return _wallets; }
+            set { _wallets = value; OnPropertyChanged(nameof(Wallets)); }
+        }
 
         public HistoryVM()
         {
-            Transactions = new ObservableCollection<Transaction>()
+            UpdateTransactions();
+
+            DataWorker.OnTransactionsChanged += (e) =>
             {
-                new Transaction() { Wallet = null, Amount = 12000m, TransactionType = Transaction.TransactionTypeEnum.Expense,
-                    Category = new Category("Покупки"), TransactionDate = DateTime.Now.ToString("M") },
-                new Transaction() { Wallet = null, Amount = 10500m, TransactionType = Transaction.TransactionTypeEnum.Expense,
-                    Category = new Category("Образование"), TransactionDate = DateTime.Now.ToString("M") },
-                new Transaction() { Wallet = null, Amount = 800m, TransactionType = Transaction.TransactionTypeEnum.Expense,
-                    Category = new Category("Питание"), TransactionDate = DateTime.Now.ToString("M") },
+                UpdateTransactions();
             };
 
-            TransactionsDay =
-                [
-                    Transactions, Transactions, Transactions,
-                    Transactions, Transactions, Transactions,
-                    Transactions, Transactions, Transactions,
-                    Transactions, Transactions, Transactions
-                ];
+            Wallets = new ObservableCollection<Wallet>(DataWorker.GetAllWallets());
+
+            DataWorker.OnWalletsChanged += (e) =>
+            {
+                Wallets = new ObservableCollection<Wallet>(DataWorker.GetAllWallets());
+            };
+        }
+
+        private void UpdateTransactions()
+        {
+            TransactionCards = new ObservableCollection<TransactionCard>();
+            Transactions = new ObservableCollection<Transaction>(DataWorker.GetAllTransactions());
+            TransactionCards?.Clear();
+
+            var some = Transactions.GroupBy(el => new { el.TransactionDate.Day, el.TransactionDate.Month });
+
+            foreach (var group in some)
+            {
+                ObservableCollection<Transaction> newTransactions = [.. group];
+
+                TransactionCards.Add(new TransactionCard(newTransactions));
+            }
         }
     }
 }

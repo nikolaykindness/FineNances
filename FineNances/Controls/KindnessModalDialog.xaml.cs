@@ -8,8 +8,6 @@ namespace FineNances.Controls
     /// </summary>
     public partial class KindnessModalDialog : UserControl
     {
-
-
         static KindnessModalDialog()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(KindnessModalDialog), new FrameworkPropertyMetadata(typeof(KindnessModalDialog)));

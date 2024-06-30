@@ -1,31 +1,25 @@
-﻿namespace FineNances.Model
+﻿using System.Collections.Generic;
+
+using FineNances.Core;
+
+namespace FineNances.Model
 {
-    internal class Category
+    internal class Category : BindableBase
     {
-        private int _id;
-        private string _name;
+        public int Id { get; set; }
+        public string Name { get; set; }
 
-        public int Id
-        {
-            get => _id;
-            set => _id = value;
-        }
-
-        public string Name
-        {
-            get => _name;
-            set => _name = value;
-        }
+        public ICollection<Transaction> Transactions { get; set; }
 
         public Category()
         {
-            _id = -1;
-            _name = string.Empty;
+            Id = -1;
+            Name = string.Empty;
         }
 
         public Category(string name)
         {
-            _name = name;
+            Name = name;
         }
     }
 }

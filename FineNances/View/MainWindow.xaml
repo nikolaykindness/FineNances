@@ -6,9 +6,11 @@
         xmlns:core="clr-namespace:FineNances.Core"
         xmlns:vm="clr-namespace:FineNances.ViewModel"
         xmlns:controls="clr-namespace:FineNances.Controls"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Background="#F8F8F8"
-        Title="FineNances" Width="1040" Height="720">
+        Icon="/Images/Icons/FineNancesLogo.png"
+        Title="FineNances" Width="1040" Height="724">
 
     <Window.DataContext>
         <vm:ApplicationVM/>
@@ -22,8 +24,73 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <controls:KindnessModalDialog>
-            
+        <!--// MODAL DIALOG //-->
+        <controls:KindnessModalDialog
+            Grid.Column="0" Grid.ColumnSpan="2"
+            IsOpen="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}},
+                                Path=DataContext.DialogIsOpen}"
+            Panel.ZIndex="10">
+            <controls:KindnessModalDialog.Background>
+                <SolidColorBrush Color="White" Opacity="0.5"/>
+            </controls:KindnessModalDialog.Background>
+
+            <Border HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="#FFF"
+                BorderBrush="#E8E8E8"
+                BorderThickness="2"
+                Padding="16">
+
+                <StackPanel>
+                    <TextBlock FontSize="24" Text="Добавить платеж"/>
+                    <StackPanel Margin="0 12">
+                        <TextBlock Text="Тип платежа"/>
+                        <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}},
+                            Path=DataContext.TransactionTypeEnum}"
+                                  SelectedItem="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}},
+                            Path=DataContext.SelectedEnumType, Mode=TwoWay}">
+                        </ComboBox>
+                        <TextBlock Text="Кошелек"/>
+                        <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}},
+                            Path=DataContext.Wallets,UpdateSourceTrigger=PropertyChanged}"
+                                  SelectedItem="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}},
+                            Path=DataContext.SelectedWallet, Mode=TwoWay}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <TextBlock Text="Категория"/>
+                        <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}},
+                            Path=DataContext.Categories,UpdateSourceTrigger=PropertyChanged}"
+                                  SelectedItem="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}},
+                            Path=DataContext.SelectedCategory, Mode=TwoWay}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <TextBlock Text="Сумма платежа"/>
+                        <TextBox Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}},
+                            Path=DataContext.TransactionAmount, Mode=TwoWay}"
+                            BorderBrush="#E8E8E8" BorderThickness="1"/>
+                        <TextBlock Text="Дата платежа"/>
+                        <DatePicker SelectedDate="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}},
+                            Path=DataContext.TransactionDate, Mode=TwoWay}"/>
+                    </StackPanel>
+                    <UniformGrid Rows="1">
+                        <Button Content="Сохранить" Margin="0 0 12 0"
+                        Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}},
+                                Path=DataContext.SaveTransactionCommand}"/>
+                        <Button Content="Отменить" Margin="12 0 0 0"
+                        Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}},
+                                Path=DataContext.CancelTransactionCommand}"/>
+                    </UniformGrid>
+                </StackPanel>
+
+            </Border>
         </controls:KindnessModalDialog>
 
         <!--// Side Bar //-->
@@ -46,7 +113,6 @@
 
                         <Separator Height="1" Background="#99989D"
                                    Margin="0 0 0 4"/>
-                        <controls:NavigateButton Content="Настройки"/>
                         <controls:NavigateButton Content="О программе"
                                                  Command="{Binding AboutProgrammCommand}"/>
 
@@ -64,14 +130,17 @@
 
                         <controls:NavigateButton Content="Главная" IsChecked="True"
                             Command="{Binding HomeCommand}"/>
-                        <controls:NavigateButton Content="Копилка"
-                            Command="{Binding PiggyBankCommand}"/>
+                        <controls:NavigateButton Content="Статистика"
+                            Command="{Binding StatisticsCommand}"/>
                         <controls:NavigateButton x:Name="History" Content="История"
                             Command="{Binding HistoryCommand}"/>
                         <controls:NavigateButton x:Name="Category" Content="Категории"
                             Command="{Binding CategoryCommand}"/>
                         <Button Style="{StaticResource AdditionalButton}"
-                            Margin="24 12" Content="+ Платеж"/>
+                            Margin="24 12" Content="+ Платеж"
+                            Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}},
+                                Path=DataContext.AddTranscationCommand}"
+                            CommandParameter="{Binding}"/>
 
                     </StackPanel>
 
@@ -81,6 +150,7 @@
 
         </Grid>
 
+        <!--// Tab View //-->
         <Grid Grid.Column="1">
 
             <ContentControl x:Name="Pages"

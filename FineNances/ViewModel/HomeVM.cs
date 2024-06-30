@@ -1,58 +1,43 @@
-﻿using FineNances.Core;
-using FineNances.Model;
-using FineNances.View;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Linq;
 using System.Windows.Input;
+
+using FineNances.Core;
+using FineNances.Controls;
+using FineNances.Model;
+using FineNances.View;
+using System.Windows.Documents;
+using System.Collections.Generic;
 
 namespace FineNances.ViewModel
 {
-    internal class HomeVM : ViewModelBase
+    internal class HomeVM : BindableBase
     {
-        private string _totalExpenses;
-        private bool _walletDialogIsOpen;
-        private Wallet _selectedWallet;
-        private Goal _selectedGoal;
-        private Transaction _selectedExpenseTransaction;
-        private Transaction _selectedRecentlyTransaction;
+        private ObservableCollection<Transaction> _topExpenses;
+        private ObservableCollection<Transaction> _recentlyTransactions;
 
-        public bool WalletDialogIsOpen
-        {
-            get { return _walletDialogIsOpen; }
-            set { _walletDialogIsOpen = value; OnPropertyChanged(nameof(WalletDialogIsOpen)); }
-        }
-        public string DisplayTotalExpenses
-        {
-            get { return _totalExpenses; }
-            set { _totalExpenses = value; OnPropertyChanged(nameof(DisplayTotalExpenses)); }
-        }
+        public string DisplayTotalExpenses { get; set; }
+
+        public Wallet SelectedWallet { get; set; }
+        public Transaction SelectedExpenseTransaction { get; set; }
+        public Transaction SelectedRecentlyTransaction { get; set; }
+        public Goal SelectedGoal { get; set; }
 
         public ObservableCollection<Goal> Goals { get; set; }
-        public ObservableCollection<Transaction> RecentlyTransactions { get; set; }
         public ObservableCollection<Wallet> Wallets { get; set; }
         public ObservableCollection<Transaction> Transactions { get; set; }
 
-        public Wallet SelectedWallet
+        public ObservableCollection<Transaction> TopExpenses
         {
-            get { return _selectedWallet; }
-            set { _selectedWallet = value; OnPropertyChanged(nameof(SelectedWallet)); }
+            get { return _topExpenses; }
+            set {  _topExpenses = value; OnPropertyChanged(nameof(TopExpenses)); }        
         }
-        public Transaction SelectedExpenseTransaction
+        public ObservableCollection<Transaction> RecentlyTransactions
         {
-            get { return _selectedExpenseTransaction; }
-            set { _selectedExpenseTransaction = value; OnPropertyChanged(nameof(SelectedExpenseTransaction)); }
-        }
-
-        public Transaction SelectedRecentlyTransaction
-        {
-            get { return _selectedRecentlyTransaction; }
-            set { _selectedRecentlyTransaction = value; OnPropertyChanged(nameof(SelectedRecentlyTransaction)); }
-        }
-
-        public Goal SelectedGoal
-        {
-            get { return _selectedGoal; }
-            set { _selectedGoal = value; OnPropertyChanged(nameof(SelectedGoal)); }
+            get { return _recentlyTransactions; }
+            set { _recentlyTransactions = value; OnPropertyChanged(nameof(RecentlyTransactions)); }
         }
 
         public ICommand AddWalletCommand => new RelayCommand(AddWalletModal);
@@ -63,12 +48,7 @@ namespace FineNances.ViewModel
 
         public HomeVM()
         {
-            Wallets = new ObservableCollection<Wallet>()
-            {
-                /*new Wallet() { Name = "Банковский счет", Amount = 13590m, CurrencyType = Wallet.CurrencyTypeEnum.RU },
-                new Wallet() { Name = "Наличные", Amount = 13590m, CurrencyType = Wallet.CurrencyTypeEnum.RU },
-                new Wallet() { Name = "Кредитная карта", Amount = 13590m, CurrencyType = Wallet.CurrencyTypeEnum.RU }*/
-            };
+            Wallets = new ObservableCollection<Wallet>(DataWorker.GetAllWallets());
 
             Goals = new ObservableCollection<Goal>()
             {
@@ -77,38 +57,50 @@ namespace FineNances.ViewModel
                 new Goal() { Name = "На видеокарту", FinalAmount = 80000, CurrentAmount = 64300m, CurrencyType = Goal.CurrencyTypeEnum.RU }
             };
 
-            Transactions = new ObservableCollection<Transaction>()
-            {
-                /*new Transaction() { Wallet = null, Amount = 12000m, TransactionType = Transaction.TransactionTypeEnum.Expense, 
-                    Category = new Model.Category("Покупки"), TransactionDate = DateTime.Now.ToString("M") },
-                new Transaction() { Wallet = null, Amount = 10500m, TransactionType = Transaction.TransactionTypeEnum.Expense,
-                    Category = new Model.Category("Образование"), TransactionDate = DateTime.Now.ToString("M") },
-                new Transaction() { Wallet = null, Amount = 800m, TransactionType = Transaction.TransactionTypeEnum.Expense,
-                    Category = new Model.Category("Питание"), TransactionDate = DateTime.Now.ToString("M") },*/
-            };
+            var temp = DataWorker.GetAllTransactions();
 
-            RecentlyTransactions = new ObservableCollection<Transaction>()
-            {
-                /*new Transaction() { Wallet = null, TransactionDate = DateTime.Now.ToString("M"), Amount = 5000m,
-                                    Category = new Model.Category("Зарплата"), TransactionType = Transaction.TransactionTypeEnum.Income },
-                new Transaction() { Wallet = null, TransactionDate = DateTime.Now.ToString("M"), Amount = 300m,
-                                    Category = new Model.Category("Питание"), TransactionType = Transaction.TransactionTypeEnum.Expense },
-                new Transaction() { Wallet = null, TransactionDate = DateTime.Now.ToString("M"), Amount = 10990m,
-                                    Category = new Model.Category("Техника"), TransactionType = Transaction.TransactionTypeEnum.Expense}*/
-            };
+            Transactions = new ObservableCollection<Transaction>(temp);
+
+            UpdateTopExpenses(temp);
+
+            RecentlyTransactions = new ObservableCollection<Transaction>(temp.Skip(Math.Max(0, temp.Count() - 3)).Reverse());
 
             decimal sum = 0m;
 
             foreach (Transaction item in Transactions)
             {
-                sum += item.Amount;
+                if(item.TransactionDate.Month == DateTime.Now.Month
+                   && item.TransactionType == Transaction.TransactionTypeEnum.Expense)
+                {
+                    sum += item.Amount;
+                }
             }
 
-            //DisplayTotalExpenses = string.Format(new CultureInfo(Wallets[0].CurrencyTypeCulture), "{0:N0} {1}", sum, new CultureInfo(Wallets[0].CurrencyTypeCulture).NumberFormat.CurrencySymbol);
             DisplayTotalExpenses = string.Format(new CultureInfo("ru-RU"), "{0:N0} {1}", sum, new CultureInfo("ru-RU").NumberFormat.CurrencySymbol);
-            foreach (Transaction item in Transactions)
+            foreach (var item in TopExpenses)
             {
                 item.Percantage = (int)(item.Amount / sum * 100.0m);
+            }
+        }
+
+        private void UpdateTopExpenses(List<Transaction> transactions)
+        {
+            var topExpenses = transactions.Where(el => el.TransactionType == Transaction.TransactionTypeEnum.Expense
+                                         && el.TransactionDate.Month == DateTime.Now.Month)
+                                  .GroupBy(el => new { el.CategoryId }, el => el, (key, g) => new { key.CategoryId, expenses = g.ToList() })
+                                  .Select(x => new { x.CategoryId, WalletsId = x.expenses.Select(y => y.WalletId).ToArray(), CategorySum = x.expenses.Select(y => y.Amount).Sum() })
+                                  .ToArray();
+
+            TopExpenses = new ObservableCollection<Transaction>();
+            foreach (var group in topExpenses)
+            {
+                Transaction newTransaction = new Transaction();
+                foreach (var item in group.WalletsId)
+                {
+                    newTransaction = new() { CategoryId = group.CategoryId, WalletId = item, Amount = group.CategorySum };
+                }
+
+                TopExpenses.Add(newTransaction);
             }
         }
 
@@ -119,23 +111,18 @@ namespace FineNances.ViewModel
         }
 
         #region Wallet
-        private string _walletName;
+        public string WalletName { get; set; }
+        public decimal InitialBalance { get; set; }
 
-        public string WalletName
-        {
-            get { return _walletName; }
-            set
-            {
-                _walletName = value;
-                OnPropertyChanged(nameof(WalletName));
-            }
-        }
         private bool AddWalletToCollection()
         {
-            if (!string.IsNullOrWhiteSpace(_walletName))
+            if (!string.IsNullOrWhiteSpace(WalletName))
             {
-                Wallet wallet = new() { Name = WalletName, Amount = 0m, CurrencyType = Wallet.CurrencyTypeEnum.RU };
+                Wallet wallet = new() { Name = WalletName, Amount = InitialBalance, CurrencyTypeId = (int)Wallet.CurrencyTypeEnum.RU };
+
+                DataWorker.AddWallet(wallet);
                 Wallets.Add(wallet);
+
                 WalletName = string.Empty;
 
                 return true;
@@ -144,23 +131,29 @@ namespace FineNances.ViewModel
             return false;
         }
 
+        private KindnessModalDialog modalWnd;
+
         private void AddWalletModal(object obj)
         {
-            WalletDialogIsOpen = true;
+            modalWnd = (KindnessModalDialog)obj;
+            modalWnd.IsOpen = true;
         }
 
         private void SaveWallet(object obj)
         {
             if (AddWalletToCollection())
             {
-                WalletDialogIsOpen = false;
+                modalWnd.IsOpen = false;
+                modalWnd = null;
             }
+        }
+        private void CancelModal(object obj)
+        {
+            modalWnd.IsOpen = false;
+            modalWnd = null;
         }
         #endregion
 
-        private void CancelModal(object obj)
-        {
-            WalletDialogIsOpen = false;
-        }
+
     }
 }

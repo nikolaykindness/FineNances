@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using FineNances.Model;
+using System.Windows;
 
 namespace FineNances.View
 {

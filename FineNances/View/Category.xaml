@@ -5,9 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:vm="clr-namespace:FineNances.ViewModel"
              xmlns:controls="clr-namespace:FineNances.Controls"
+             x:Name="root"
              mc:Ignorable="d" 
              Style="{StaticResource PageStyle}"
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="688" d:DesignWidth="896">
 
     <UserControl.DataContext>
         <vm:CategoryVM/>
@@ -16,7 +17,7 @@
     <Border Background="#F8F8F8">
 
         <Grid>
-
+ 
             <Grid.RowDefinitions>
                 <RowDefinition Height="100"/>
                 <RowDefinition Height="*"/>
@@ -60,31 +61,51 @@
 
                 <!--// SEARCH-BOX //-->
                 <Border Margin="32 60 0 0" MinWidth="380"
+                        CornerRadius="16"
                         HorizontalAlignment="Left" Padding="8"
-                        Background="#FFF" BorderThickness="1" BorderBrush="#E8E8E8">
+                        Background="#FFF" BorderThickness="2" BorderBrush="#E8E8E8">
 
                     <DockPanel>
-                        <Border Background="#1E1E1E" DockPanel.Dock="Left" Width="24" Height="24"/>
-                        <TextBox Margin="8 0 0 0"
-                                 VerticalAlignment="Center"
-                                 Text="Поиск"
-                                 Foreground="#E8E8E8"/>
+                        <Border DockPanel.Dock="Left"
+                                Width="24">
+
+                            <Image>
+                                <Image.Source>
+                                    <DrawingImage>
+                                        <DrawingImage.Drawing>
+                                            <DrawingGroup ClipGeometry="M0,0 V116 H116 V0 H0 Z">
+                                                <GeometryDrawing Brush="#E8E8E8" Geometry="F1 M116,116z M0,0z M103.469,95.4712L82.1516,74.1539C87.2838,67.3216 90.0543,59.0052 90.045,50.46 90.045,28.633 72.287,10.875 50.46,10.875 28.633,10.875 10.875,28.633 10.875,50.46 10.875,72.287 28.633,90.045 50.46,90.045 59.0052,90.0543 67.3216,87.2838 74.1539,82.1516L95.4712,103.469C96.5503,104.433 97.9577,104.948 99.4045,104.908 100.851,104.867 102.228,104.275 103.251,103.251 104.275,102.228 104.867,100.851 104.908,99.4045 104.948,97.9577 104.433,96.5503 103.469,95.4712z M22.185,50.46C22.185,44.8677 23.8433,39.4011 26.9502,34.7513 30.0571,30.1015 34.473,26.4774 39.6396,24.3373 44.8062,22.1972 50.4914,21.6373 55.9762,22.7283 61.461,23.8193 66.4991,26.5122 70.4534,30.4666 74.4078,34.4209 77.1007,39.459 78.1917,44.9438 79.2827,50.4286 78.7228,56.1138 76.5827,61.2804 74.4426,66.447 70.8186,70.8629 66.1688,73.9698 61.519,77.0767 56.0523,78.735 50.46,78.735 42.9638,78.726 35.7771,75.7442 30.4765,70.4435 25.1758,65.1429 22.194,57.9562 22.185,50.46z" />
+                                            </DrawingGroup>
+                                        </DrawingImage.Drawing>
+                                    </DrawingImage>
+                                </Image.Source>
+                            </Image>
+                            
+                        </Border>
+                        <controls:KindnessTextBox Margin="8 0 0 0"
+                                                  Style="{StaticResource PlacheholderTextBox}"
+                                                  Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                  Placeholder="Название категории"/>
                     </DockPanel>
 
                 </Border>
 
                 <Button Margin="32 60 0 0" Content="+ Категория"
-                        Command="{Binding AddCategoryCommand}"/>
+                        Command="{Binding AddCategoryCommand}"
+                        Width="96"
+                        Height="32"
+                        Style="{StaticResource AdditionalButton}"/>
 
             </StackPanel>
 
             <!--// Categorties //-->
             <ListBox Margin="32"
                      Grid.Row="1"
-                     ItemsSource="{Binding Categories}"
-                     SelectedItem="{Binding SelectedCategory}"
+                     ItemsSource="{Binding Categories, UpdateSourceTrigger=PropertyChanged}"
+                     SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"
                      Background="Transparent"
-                     Style="{StaticResource FineNancesScrollableListBoxStyle}">
+                     Style="{StaticResource FineNancesScrollableListBoxStyle}"
+                     ScrollViewer.VerticalScrollBarVisibility="Auto">
 
                 <ListBox.ItemTemplate>
                     <DataTemplate>
@@ -94,13 +115,34 @@
                                 Background="#FFF" BorderThickness="1" 
                                 BorderBrush="#E8E8E8">
 
-                            <StackPanel Orientation="Horizontal">
+                            <DockPanel>
 
-                                <Ellipse Width="32" Height="32" Fill="#1E1E1E"/>
+                                <Button Width="24" DockPanel.Dock="Right"
+                                        BorderThickness="0"
+                                        Command="{Binding DataContext.RemoveCategoryCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}}">
+                                    <Button.DataContext>
+                                        <vm:CategoryVM/>
+                                    </Button.DataContext>
+                                    <Button.Background>
+                                        <SolidColorBrush Color="Transparent"/>
+                                    </Button.Background>
+                                    <Image>
+                                        <Image.Source>
+                                            <DrawingImage>
+                                                <DrawingImage.Drawing>
+                                                    <DrawingGroup ClipGeometry="M0,0 V32 H32 V0 H0 Z">
+                                                        <GeometryDrawing Brush="#1E1E1E" Geometry="F1 M32,32z M0,0z M6,12L6,27C6,28.654,7.346,30,9,30L23,30C24.654,30,26,28.654,26,27L26,12 6,12z M12,25C12,25.552 11.552,26 11,26 10.448,26 10,25.552 10,25L10,16C10,15.448 10.448,15 11,15 11.552,15 12,15.448 12,16L12,25z M17,25C17,25.552 16.552,26 16,26 15.448,26 15,25.552 15,25L15,16C15,15.448 15.448,15 16,15 16.552,15 17,15.448 17,16L17,25z M22,25C22,25.552 21.552,26 21,26 20.448,26 20,25.552 20,25L20,16C20,15.448 20.448,15 21,15 21.552,15 22,15.448 22,16L22,25z" />
+                                                        <GeometryDrawing Brush="#1E1E1E" Geometry="F1 M32,32z M0,0z M27,6L21,6 21,5C21,3.346,19.654,2,18,2L14,2C12.346,2,11,3.346,11,5L11,6 5,6C3.897,6,3,6.897,3,8L3,9C3,9.552,3.448,10,4,10L28,10C28.552,10,29,9.552,29,9L29,8C29,6.897,28.103,6,27,6z M13,5C13,4.449,13.449,4,14,4L18,4C18.551,4,19,4.449,19,5L19,6 13,6 13,5z" />
+                                                    </DrawingGroup>
+                                                </DrawingImage.Drawing>
+                                            </DrawingImage>
+                                        </Image.Source>
+                                    </Image>
+                                </Button>
                                 <TextBlock VerticalAlignment="Center"
                                            Margin="16 0 0 0" Text="{Binding Name}"/>
 
-                            </StackPanel>
+                            </DockPanel>
 
                         </Border>
 

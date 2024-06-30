@@ -1,20 +1,23 @@
-﻿using FineNances.Core;
-using FineNances.Model;
-using FineNances.Model.Data;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows.Documents;
 using System.Windows.Input;
+
+using FineNances.Core;
+using FineNances.Model;
 
 namespace FineNances.ViewModel
 {
-    internal class CategoryVM : ViewModelBase
+    internal sealed class CategoryVM : BindableBase
     {
         private string _name;
         private string _note;
+        private string _searchText;
 
         private Category _selectedCategory;
+
+        private delegate void SearchTextHandler();
+        private event SearchTextHandler SearchTextChanged;
 
         public string Name
         {
@@ -28,6 +31,17 @@ namespace FineNances.ViewModel
             set { _note = value; OnPropertyChanged(nameof(Note)); }
         }
 
+        public string SearchText
+        {
+            get { return _searchText; }
+            set 
+            {
+                _searchText = value;
+                SearchTextChanged?.Invoke();
+                OnPropertyChanged(nameof(SearchText));
+            }
+        }
+
         public Category SelectedCategory
         {
             get { return _selectedCategory; }
@@ -36,12 +50,45 @@ namespace FineNances.ViewModel
 
         public ObservableCollection<Category> Categories { get; set; }
 
+        private ICollection<Category> _tempCategories;
+
         public CategoryVM()
         {
-            Categories = new ObservableCollection<Category>(DataWorker.GetAllCategories());
+            UpdateCategories();
+
+            SearchTextChanged += OnSearchTextChanged;
+        }
+
+        private void UpdateCategories()
+        {
+            _tempCategories = DataWorker.GetAllCategories();
+            Categories = new ObservableCollection<Category>(_tempCategories);
+        }
+
+        private void OnSearchTextChanged()
+        {
+            Categories.Clear();
+
+            if (!string.IsNullOrEmpty(SearchText))
+            {
+                var filteredItem = _tempCategories.Where(element => element.Name.ToUpper().StartsWith(SearchText.ToUpper()));
+
+                foreach (var item in filteredItem)
+                {
+                    Categories.Add(item);
+                }
+            }
+            else
+            {
+                foreach (var item in _tempCategories)
+                {
+                    Categories.Add(item);
+                }
+            }
         }
 
         public ICommand AddCategoryCommand => new RelayCommand(AddCategory);
+        public ICommand RemoveCategoryCommand => new RelayCommand(RemoveCategory);
         public ICommand SaveCategoryCommand => new RelayCommand(SaveCategory);
         public ICommand CancelCategoryCommand => new RelayCommand(CancelCategory);
 
@@ -57,14 +104,26 @@ namespace FineNances.ViewModel
             DialogIsOpen = true;
         }
 
+        private void RemoveCategory(object obj)
+        {
+            if(DataWorker.RemoveCategory(SelectedCategory))
+            { 
+                _tempCategories.Remove(SelectedCategory);
+                Categories.Remove(SelectedCategory);
+            }
+        }
+
         private void SaveCategory(object obj)
         {
             if (!string.IsNullOrWhiteSpace(Name))
             {
-                Category newCategory = new Category(Name);
+                Category newCategory = new(Name);
 
-                Categories.Add(newCategory);
-                DataWorker.AddCategory(newCategory);
+                if (DataWorker.AddCategory(newCategory))
+                {
+                    _tempCategories = DataWorker.GetAllCategories();
+                    Categories.Add(_tempCategories.Last());
+                }
 
                 Name = string.Empty;
                 DialogIsOpen = false;
